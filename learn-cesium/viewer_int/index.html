@@ -58,6 +58,23 @@
         110.4,
         61.2
       );
+
+      // const c1 = Cesium.Cartesian3.fromDegrees(121, 31, 10);
+
+      // // console.log(c1);
+
+      // const cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(c1); //通过椭球体参数将笛卡尔空间直角坐标转为WGS84
+      // console.log(cartographic);
+
+      // const cartesian2 = [100, 100, 100];
+      const cartesian3 = viewer.scene.pickPosition(cartesian2); // 屏幕坐标转场景空间直角坐标
+      const cartesian3_2 = viewer.scene.globe.pick(
+        viewer.camera.getPickRay(cartesian2),
+        viewer.scene
+      ); // 屏幕坐标转笛卡尔空间坐标
+      const cartesian3_3 = viewer.scene.camera.pickEllipsoid(cartesian2); //屏幕坐标转椭球面笛卡尔空间坐标
+
+      console.log(cartesian3, cartesian3_2, cartesian3_3);
     </script>
   </body>
 </html>
