@@ -26,6 +26,13 @@
         pitch: Cesium.Math.toRadians(-90.0), // 默认垂直向下
         roll: 0.0,
       };
+
+      // const terrainProvider = Cesium.createWorldTerrain({
+      //   requestVertexNormals: true,
+      //   requestWaterMask: true,
+      // });
+      // viewer.scene.globe.enableLighting = true;
+      // viewer.terrainProvider = terrainProvider;
       // viewer.camera.lookAt(
       //   position,
       //   new Cesium.HeadingPitchRange(
@@ -34,23 +41,31 @@
       //     50.0
       //   )
       // );
-      viewer.camera.flyTo({
-        destination: position,
-        orientation,
+      const layers = viewer.scene.imageryLayers;
+      const mapboxLayer = layers.addImageryProvider(
+        new Cesium.MapboxImageryProvider({
+          mapId: "mapbox.mapbox-streets-v8",
+          accessToken:
+            "pk.eyJ1IjoiYXNoZXMxMjMiLCJhIjoiY2xoeWxiZWtiMTUzNzNlbnQ5emxsMWV4ayJ9.tEaldeEC9cE7jBg8aOPJPw",
+        })
+      );
+      // viewer.camera.flyTo({
+      //   destination: position,
+      //   orientation,
 
-        duration: 5,
-        complete: () => {
-          alert("到了");
-        }, //结束后执行
+      //   duration: 5,
+      //   complete: () => {
+      //     alert("到了");
+      //   }, //结束后执行
 
-        cancle: () => {
-          alert("不飞了");
-        }, //取消后执行
+      //   cancle: () => {
+      //     alert("不飞了");
+      //   }, //取消后执行
 
-        pitchAdjustHeight: -90, // 如果相机高于该值，则调整俯仰角度，并将地球保持在视域中
-        maximumHeight: 10000, // 相机最大飞行高度
-        flyOverLongitude: 150, // 必须经过的经度
-      });
+      //   pitchAdjustHeight: -90, // 如果相机高于该值，则调整俯仰角度，并将地球保持在视域中
+      //   maximumHeight: 10000, // 相机最大飞行高度
+      //   flyOverLongitude: 150, // 必须经过的经度
+      // });
     </script>
   </body>
 </html>
