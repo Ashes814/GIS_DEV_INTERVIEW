@@ -4,71 +4,51 @@
     <meta charset="UTF-8" />
     <title>购物车特效</title>
     <style>
-      li:first-child {
-          height: 20px;
-          width: 100px;
-          background-color: #139aff;
+      #value1{
+              display: none;
       }
-      li:last-child {
-          height: 60px;
-          width: 100px;
-          background-color: #89ff56;
-          line-height: 60px;
+      #value1:checked+label{
+          color:blue;
+          background: #4cda60;
       }
-      p:first-of-type {
-          background-color:  red;
+      #value1:checked+label:before{
+          left:31px;
       }
-      p:last-of-type {
-          background-color:deeppink;
+      #value1+label{
+          cursor: pointer;
+          color:red;
+          display: block;
+          width:60px;
+          height: 30px;
+          background: #fafbfa;
+          border-radius: 15px;
+          position: relative;
+          box-shadow:inset 0 0 0 0 #eee,0 0 1px rgba(0,0,0,0.4);
+          transition: background 0.1s;
+          -webkit-transition: background 0.1s;
+          -moz-transition: background 0.1s;
+          -o-transition: background 0.1s;
       }
-      
-      
-      /*每个p标签之前新增一个Hello文本*/
-      .container p::before {
-          content: 'Hello';
-      }
-      .container p::after {
-          content: 'Thanks';
-      }
-      .container p::first-letter {
-          font-size: 32px;
-      }
-      .container p::first-line {
-          background-color: #f1ffad;
-      }
-      
-      /*所有选中的元素会变色*/
-      .container p::selection {
-          background-color: #1025ff;
-          color: red;
+      #value1+label:before{
+          content:'';
+          position: absolute;
+          background: #fff;
+          top:1px;
+          left:1px;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          box-shadow:0 3px 1px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.3);
+          transition: left 0.1s;
+          -webkit-transition: left 0.1s;
+          -moz-transition: left 0.1s;
+          -o-transition: left 0.1s;
       }
       </style>
       <body>
-          <ul>
-              <li>111</li>
-              <li>222</li>
-              <li>333</li>
-              <li>444</li>
-              <li>555</li>
-          </ul>
-      <div>
-          <h1>h1文本</h1>
-          <p>p文本1</p>
-          <p>p文本2</p>
-          <p>p文本3</p>
-          <p>p文本4</p>
-      </div>
-      
-      <div class="container">
-          <p> css1 </p>
-          <p> css2 </p>
-          <p> css3 </p>
-          <p>我在学伪元素,我在学伪元素,
-            我在学伪元素,我在学伪元素,
-            我在学伪元素,我在学伪元素,我在学伪元素,
-            我在学伪元素,我在学伪元素,我在学伪元素,
-            我在学伪元素</p>
-      </div>
+          <input type="checkbox" name="timeType" value="1" id="value1" checked="checked"/>
+          <label for="value1"></label>
       </body>
+      
       </html>
       
