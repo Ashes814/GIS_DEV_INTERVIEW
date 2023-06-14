@@ -11,13 +11,21 @@
           <label for="value1"></label>
       </body>
       <script>
-        console.log(null & undefined & NaN & '' & false & 0)
+      let animal = {
+  eats: true
+}; // 待会儿F.prototype就指向这个对象
 
-    
-        if (null && undefined && NaN && '' && false && 0) {
-            console.log("ok")
-        }
-       
+function Rabbit(name) {
+  this.name = name;
+  // return {a:1}
+}
+
+Rabbit.prototype = animal; // 指向animal
+
+let rabbit = new Rabbit("White Rabbit"); //  相当于运行了rabbit.__proto__ == animal, 并调用rabbit这个函数
+console.log(rabbit)
+// alert( rabbit.eats ); // true
+console.log(rabbit.__proto__)
       </script>
       </html>
       
