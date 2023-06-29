@@ -9,23 +9,16 @@
       <body>
           <input type="checkbox" name="timeType" value="1" id="value1" checked="checked"/>
           <label for="value1"></label>
+          
+          <button id="btn">test</button>
       </body>
       <script>
-      let animal = {
-  eats: true
-}; // 待会儿F.prototype就指向这个对象
-
-function Rabbit(name) {
-  this.name = name;
-  // return {a:1}
-}
-
-Rabbit.prototype = animal; // 指向animal
-
-let rabbit = new Rabbit("White Rabbit"); //  相当于运行了rabbit.__proto__ == animal, 并调用rabbit这个函数
-console.log(rabbit)
-// alert( rabbit.eats ); // true
-console.log(rabbit.__proto__)
-      </script>
+        "use strict"
+        const btn = document.getElementById("btn");
+        btn.onclick = fn;
+        function fn() {
+          console.log(this); //<button id="btn">test</button>
+        }
+        </script>
       </html>
       
