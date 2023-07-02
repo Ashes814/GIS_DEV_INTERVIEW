@@ -13,12 +13,27 @@
           <button id="btn">test</button>
       </body>
       <script>
-        "use strict"
-        const btn = document.getElementById("btn");
-        btn.onclick = fn;
-        function fn() {
-          console.log(this); //<button id="btn">test</button>
-        }
+      "use strict"
+//       function control(x) {
+//   if (x == 3) throw new Error("break");
+// }
+// function foo(x = 6) {
+//   return {
+//     next: () => {
+//       control(x);
+//       return {done: !x, value: x && x--};
+//     }
+//   }
+// }
+// let x = new Object;
+// x[Symbol.iterator] = foo;
+// for (let i of x) console.log(i);
+for(var i=0;i<3;++i){
+    setTimeout(function(){
+        console.log(i)
+    },100);
+}
+
         </script>
       </html>
       
