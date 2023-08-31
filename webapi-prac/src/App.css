@@ -1,0 +1,8 @@
+#root {
+}
+
+.three-demo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

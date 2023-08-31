@@ -1,39 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>购物车特效</title>
-    <style>
-   
-      </style>
-      <body>
-          <input type="checkbox" name="timeType" value="1" id="value1" checked="checked"/>
-          <label for="value1"></label>
-          
-          <button id="btn">test</button>
-      </body>
-      <script>
-      "use strict"
-//       function control(x) {
-//   if (x == 3) throw new Error("break");
-// }
-// function foo(x = 6) {
-//   return {
-//     next: () => {
-//       control(x);
-//       return {done: !x, value: x && x--};
-//     }
-//   }
-// }
-// let x = new Object;
-// x[Symbol.iterator] = foo;
-// for (let i of x) console.log(i);
-for(var i=0;i<3;++i){
-    setTimeout(function(){
-        console.log(i)
-    },100);
-}
+<html>
+  <body>
+    <a name="list">the list</a>
+    <ul>
+      <li><a href="http://google.com">http://google.com</a></li>
+      <li><a href="/tutorial">/tutorial.html</a></li>
+      <li><a href="local/path">local/path</a></li>
+      <li><a href="ftp://ftp.com/my.zip">ftp://ftp.com/my.zip</a></li>
+      <li><a href="http://nodejs.org">http://nodejs.org</a></li>
+      <li><a href="http://internal.com/test">http://internal.com/test</a></li>
+    </ul>
 
-        </script>
-      </html>
-      
+    <script>
+      function A(x) {
+        this.x = x;
+      }
+      A.prototype.x = 1;
+
+      function B(x) {
+        this.x = x;
+      }
+      B.prototype = new A(12);
+      var a = new A(2),
+        b = new B(3);
+      delete b.x;
+      console.log(a.x);
+      console.log(b.x);
+    </script>
+  </body>
+</html>
