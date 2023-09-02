@@ -20,24 +20,34 @@ const ThreeDemo = () => {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     threeRef.current.appendChild(renderer.domElement);
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    // const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const geometry = new THREE.BufferGeometry();
+    // 创建顶点数据
+    const vertices = new Float32Array([
+      -1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0,
+    ]);
+    // 设置顶点位置属性
+    geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const parentMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    // const parentMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    // parentMaterial.wireframe = true; // set parent material to wireframe
     // create grid
-    let parentCube = new THREE.Mesh(geometry, parentMaterial);
-    const cube = new THREE.Mesh(geometry, material);
-    parentCube.add(cube);
-    parentCube.position.set(-3, 0, 0);
-    parentCube.rotation.x = Math.PI / 4;
-    cube.position.x = 3;
-    cube.scale.set(0.4, 0.4, 0.4);
-    parentCube.scale.set(1, 1, 1);
+    // let parentCube = new THREE.Mesh(geometry, parentMaterial);
+    const plane = new THREE.Mesh(geometry, material);
+    // parentCube.add(cube);
+    // parentCube.position.set(-3, 0, 0);
+    // parentCube.rotation.x = Math.PI / 4;
+    // cube.position.x = 3;
+    // cube.scale.set(0.4, 0.4, 0.4);
+    // parentCube.scale.set(1, 1, 1);
+    // console.log(geometry);
 
     // 绕着x轴旋转
-    cube.rotation.x = Math.PI / 4;
+    // cube.rotation.x = Math.PI / 4;
 
-    scene.add(parentCube);
-    camera.position.z = 10;
+    scene.add(plane);
+    camera.position.z = 2;
     camera.lookAt(1, 2, 0);
 
     // add Axes
@@ -72,6 +82,23 @@ const ThreeDemo = () => {
     const gui = new GUI();
     gui.add(eventObj, "Fullscreen");
     gui.add(eventObj, "ExitFullscreen");
+
+    //控制立方体位置
+    let folder = gui.addFolder("立方体位置");
+    folder.add(plane.position, "x", -10, 10);
+    folder
+      .add(plane.position, "y")
+      .min(-10)
+      .max(10)
+      .step(2)
+      .name("立方体y轴位置");
+    // gui.add(plane, "wireframe");
+    let colorParams = {
+      cubeColor: "#00ff00",
+    };
+    gui.addColor(colorParams, "cubeColor").onChange((val) => {
+      plane.material.color.set(val);
+    });
 
     window.addEventListener("resize", () => {
       // 重置渲染器宽高比
