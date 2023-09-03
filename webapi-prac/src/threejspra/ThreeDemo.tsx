@@ -4,6 +4,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js";
 //import hdr loader
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 const ThreeDemo = () => {
   const threeRef = useRef(null);
@@ -12,6 +14,7 @@ const ThreeDemo = () => {
   //     r.domElement.requestFullscreen();
   //   };
   useEffect(() => {
+    // basic Code
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75, // 视角,能捕捉到的范围
@@ -22,61 +25,89 @@ const ThreeDemo = () => {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     threeRef.current.appendChild(renderer.domElement);
+    camera.position.z = 2;
+    camera.lookAt(1, 2, 0);
+    const axesHelper = new THREE.AxesHelper();
+    axesHelper.scale.set(10, 10, 10);
+    scene.add(axesHelper);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    function animate() {
+      controls.update();
+      requestAnimationFrame(animate);
+      //   cube.rotation.x += 0.01;
+      //   cube.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+    const gui = new GUI();
+
+    // 实例化加载器 gltf
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load("./model/Duck.glb", (gltf) => {
+      console.log(gltf);
+      scene.add(gltf.scene);
+    });
+
+    // 加载被压缩的gltf
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("./draco/");
+    gltfLoader.setDRACOLoader(dracoLoader);
+
+    gltfLoader.load("./model/city.glb", (gltf) => {
+      console.log(gltf);
+      scene.add(gltf.scene);
+    });
+    // add env map
+
     // const geometry = new THREE.BoxGeometry(1, 1, 1);
-
     // texture loader
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load(
-      "./texture/watercover/CityNewYork002_COL_VAR1_1K.png"
-    );
-
+    // const textureLoader = new THREE.TextureLoader();
+    // const texture = textureLoader.load(
+    //   "./texture/watercover/CityNewYork002_COL_VAR1_1K.png"
+    // );
+    // set colorspace to RGB so that our eyes can have better feeling
+    // texture.colorSpace = THREE.SRGBColorSpace;
     // AO texture
-    const aoMap = textureLoader.load(
-      "./texture/watercover/CityNewYork002_AO_1K.jpg"
-    );
-
-    // transparent texture
-    const alphaMap = textureLoader.load("./texture/door/height.jpg");
-
-    // light texture
-    const lightMap = textureLoader.load("./texture/colors.png");
-
-    // specular texture
-    const specularMap = textureLoader.load(
-      "./texture/watercover/CityNewYork002_GLOSS_1K.jpg"
-    );
-
-    // rgbeLoader to add hdr texture
+    // const aoMap = textureLoader.load(
+    //   "./texture/watercover/CityNewYork002_AO_1K.jpg"
+    // );
+    // // transparent texture
+    // const alphaMap = textureLoader.load("./texture/door/height.jpg");
+    // // light texture
+    // const lightMap = textureLoader.load("./texture/colors.png");
+    // // specular texture
+    // const specularMap = textureLoader.load(
+    //   "./texture/watercover/CityNewYork002_GLOSS_1K.jpg"
+    // );
+    // // rgbeLoader to add hdr texture
     const rgbeLoader = new RGBELoader();
     rgbeLoader.load("./texture/Alex_Hart-Nature_Lab_Bones_2k.hdr", (envMap) => {
       // 为了使得hdr为立体背景而不是平面背景,需要设置球形贴图
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       // set background
-      scene.background = envMap;
+      //   scene.background = envMap;
       scene.environment = envMap;
-      planeMaterial.envMap = envMap;
+      //   planeMaterial.envMap = envMap;
     });
-
     // initial plane
-    const planeGeometry = new THREE.PlaneGeometry(1, 1);
-    const planeMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      map: texture,
-
-      // allow transparent
-      transparent: true,
-      // set ao
-      aoMap: aoMap,
-      // set alpha
-      //   alphaMap: alphaMap,
-      //set light map
-      //   lightMap,
-      //   reflectivity: 0.1,
-      specularMap,
-    });
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    scene.add(plane);
-
+    // const planeGeometry = new THREE.PlaneGeometry(1, 1);
+    // const planeMaterial = new THREE.MeshBasicMaterial({
+    //   color: 0xffffff,
+    //   map: texture,
+    //   // allow transparent
+    //   transparent: true,
+    //   // set ao
+    //   aoMap: aoMap,
+    //   // set alpha
+    //   //   alphaMap: alphaMap,
+    //   //set light map
+    //   //   lightMap,
+    //   //   reflectivity: 0.1,
+    //   specularMap,
+    // });
+    // const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    // scene.add(plane);
     // 创建顶点数据
     // const vertices = new Float32Array([
     //   -1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0,
@@ -112,52 +143,49 @@ const ThreeDemo = () => {
     // cube.scale.set(0.4, 0.4, 0.4);
     // parentCube.scale.set(1, 1, 1);
     // console.log(geometry);
-
     // 绕着x轴旋转
     // cube.rotation.x = Math.PI / 4;
-
-    camera.position.z = 2;
-    camera.lookAt(1, 2, 0);
-
-    // add Axes
-    const axesHelper = new THREE.AxesHelper();
-    axesHelper.scale.set(10, 10, 10);
-    scene.add(axesHelper);
-
-    // add orbit controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-
-    function animate() {
-      controls.update();
-      requestAnimationFrame(animate);
-      //   cube.rotation.x += 0.01;
-      //   cube.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    }
-    animate();
     // setR(renderer);
+    // let eventObj = {
+    //   Fullscreen: function () {
+    //     document.body.requestFullscreen();
+    //     console.log("fs");
+    //   },
+    //   ExitFullscreen: function () {
+    //     document.exitFullscreen();
+    //     console.log("ex");
+    //   },
+    // };
 
-    let eventObj = {
-      Fullscreen: function () {
-        document.body.requestFullscreen();
-        console.log("fs");
-      },
-      ExitFullscreen: function () {
-        document.exitFullscreen();
-        console.log("ex");
-      },
-    };
+    // 创建长方体
+    // const boxGeometry = new THREE.BoxGeometry(1, 1, 100);
+    // const boxMaterial = new THREE.MeshBasicMaterial({
+    //   color: 0x00ff00,
+    // });
+    // const box = new THREE.Mesh(boxGeometry, boxMaterial);
+    // scene.add(box);
 
-    const gui = new GUI();
-    gui.add(eventObj, "Fullscreen");
-    gui.add(eventObj, "ExitFullscreen");
-    gui
-      .add(planeMaterial, "aoMapIntensity")
-      .min(0)
-      .max(1)
-      .name("环境光遮蔽贴图");
+    // // create scene fog
+    // // scene.fog = new THREE.Fog(0xdddddd, 0.1, 50);
+    // // exponent fog
+    // scene.fog = new THREE.FogExp2(0x999999, 0.1);
+    // scene.background = new THREE.Color(0x999999);
 
+    // gui.add(eventObj, "Fullscreen");
+    // gui.add(eventObj, "ExitFullscreen");
+    // gui
+    //   .add(planeMaterial, "aoMapIntensity")
+    //   .min(0)
+    //   .max(1)
+    //   .name("环境光遮蔽贴图");
+    // gui
+    //   .add(texture, "colorSpace", {
+    //     sRGB: THREE.SRGBColorSpace,
+    //     Linear: THREE.LinearSRGBColorSpace,
+    //   })
+    //   .onChange(() => {
+    //     texture.needsUpdate = true;
+    //   });
     //控制立方体位置
     // let folder = gui.addFolder("立方体位置");
     // folder.add(plane.position, "x", -10, 10);
