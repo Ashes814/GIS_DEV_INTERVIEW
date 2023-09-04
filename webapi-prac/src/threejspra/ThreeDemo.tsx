@@ -7,6 +7,8 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
+import * as TWEEN from "three/examples/jsm/libs/tween.module.js";
+
 const ThreeDemo = () => {
   const threeRef = useRef(null);
   //   const [r, setR] = useState(null);
@@ -25,7 +27,7 @@ const ThreeDemo = () => {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     threeRef.current.appendChild(renderer.domElement);
-    camera.position.z = 2;
+    camera.position.z = 10;
     camera.lookAt(1, 2, 0);
     const axesHelper = new THREE.AxesHelper();
     axesHelper.scale.set(10, 10, 10);
@@ -38,26 +40,98 @@ const ThreeDemo = () => {
       //   cube.rotation.x += 0.01;
       //   cube.rotation.y += 0.01;
       renderer.render(scene, camera);
+      TWEEN.update();
     }
     animate();
     const gui = new GUI();
 
+    // create 3 Balls
+    const sphere1 = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 32, 32),
+      new THREE.MeshBasicMaterial({
+        color: 0x0000ff,
+      })
+    );
+    // sphere1.position.x = -3;
+    // const sphere2 = new THREE.Mesh(
+    //   new THREE.SphereGeometry(1, 32, 32),
+    //   new THREE.MeshBasicMaterial({
+    //     color: 0xff00ff,
+    //   })
+    // );
+    // sphere2.position.x = 0;
+    // const sphere3 = new THREE.Mesh(
+    //   new THREE.SphereGeometry(1, 32, 32),
+    //   new THREE.MeshBasicMaterial({
+    //     color: 0x00ffff,
+    //   })
+    // );
+    // sphere3.position.x = 3;
+    scene.add(sphere1);
+    const tween = new TWEEN.Tween(sphere1.position);
+    tween.to({ x: 10 }, 2000);
+    // tween.repeat(Infinity);
+    // tween.yoyo(true); // 悠悠球,循环运动
+    // 设置ease
+    tween.easing(TWEEN.Easing.Quadratic.InOut);
+    // tween.delay(500);
+
+    // 设置第二个动画
+    const tween2 = new TWEEN.Tween(sphere1.position);
+    tween2.to({ x: 0 }, 1000);
+    tween.chain(tween2);
+    tween2.chain(tween);
+    tween.start();
+    // scene.add(sphere2);
+    // scene.add(sphere3);
+
+    // // 创建射线
+    // const raycaster = new THREE.Raycaster();
+    // const mouse = new THREE.Vector2();
+
+    // window.addEventListener("click", (event) => {
+    //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    //   // 通过摄像机和鼠标位置更新射线
+    //   raycaster.setFromCamera(mouse, camera);
+    //   // 计算物体和射线的焦点
+    //   const intersects = raycaster.intersectObjects([
+    //     sphere1,
+    //     sphere2,
+    //     sphere3,
+    //   ]);
+    //   if (intersects.length > 0) {
+    //     if (intersects[0].object._isSelect) {
+    //       intersects[0].object.material.color.set(
+    //         intersects[0].object._originColor
+    //       );
+    //       intersects[0].object._isSelect = false;
+    //       return;
+    //     }
+    //     intersects[0].object._originColor =
+    //       intersects[0].object.material.color.getHex();
+    //     intersects[0].object.material.color.set(0xff0000);
+    //     intersects[0].object._isSelect = true;
+    //   }
+    // });
+
     // 实例化加载器 gltf
-    const gltfLoader = new GLTFLoader();
-    gltfLoader.load("./model/Duck.glb", (gltf) => {
-      console.log(gltf);
-      scene.add(gltf.scene);
-    });
+    // const gltfLoader = new GLTFLoader();
+    // gltfLoader.load("./model/Duck.glb", (gltf) => {
+    //   console.log(gltf);
+    //   scene.add(gltf.scene);
+    // });
 
-    // 加载被压缩的gltf
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath("./draco/");
-    gltfLoader.setDRACOLoader(dracoLoader);
+    // // 加载被压缩的gltf
+    // const dracoLoader = new DRACOLoader();
+    // dracoLoader.setDecoderPath("./draco/");
+    // gltfLoader.setDRACOLoader(dracoLoader);
 
-    gltfLoader.load("./model/city.glb", (gltf) => {
-      console.log(gltf);
-      scene.add(gltf.scene);
-    });
+    // gltfLoader.load("./model/city.glb", (gltf) => {
+    //   console.log(gltf);
+    //   scene.add(gltf.scene);
+    // });
     // add env map
 
     // const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -81,15 +155,15 @@ const ThreeDemo = () => {
     //   "./texture/watercover/CityNewYork002_GLOSS_1K.jpg"
     // );
     // // rgbeLoader to add hdr texture
-    const rgbeLoader = new RGBELoader();
-    rgbeLoader.load("./texture/Alex_Hart-Nature_Lab_Bones_2k.hdr", (envMap) => {
-      // 为了使得hdr为立体背景而不是平面背景,需要设置球形贴图
-      envMap.mapping = THREE.EquirectangularReflectionMapping;
-      // set background
-      //   scene.background = envMap;
-      scene.environment = envMap;
-      //   planeMaterial.envMap = envMap;
-    });
+    // const rgbeLoader = new RGBELoader();
+    // rgbeLoader.load("./texture/Alex_Hart-Nature_Lab_Bones_2k.hdr", (envMap) => {
+    //   // 为了使得hdr为立体背景而不是平面背景,需要设置球形贴图
+    //   envMap.mapping = THREE.EquirectangularReflectionMapping;
+    //   // set background
+    //   //   scene.background = envMap;
+    //   scene.environment = envMap;
+    //   //   planeMaterial.envMap = envMap;
+    // });
     // initial plane
     // const planeGeometry = new THREE.PlaneGeometry(1, 1);
     // const planeMaterial = new THREE.MeshBasicMaterial({
