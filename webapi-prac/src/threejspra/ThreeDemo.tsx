@@ -45,13 +45,73 @@ const ThreeDemo = () => {
     animate();
     const gui = new GUI();
 
+    //光照与阴影
+    const sphereGeometry = new THREE.SphereGeometry(1, 20, 20);
+    const material = new THREE.MeshStandardMaterial({});
+    const sphere = new THREE.Mesh(sphereGeometry, material);
+
+    // 物体也要投射阴影
+    sphere.castShadow = true;
+    scene.add(sphere);
+
+    // 创建平面
+    const planeGeometry = new THREE.PlaneGeometry(10, 10);
+    const plane = new THREE.Mesh(planeGeometry, material);
+    plane.position.set(0, -1, 0);
+    plane.rotation.x = -Math.PI / 2;
+    // 接收阴影
+    plane.receiveShadow = true;
+    scene.add(plane);
+
+    // 灯光
+    // 环境光
+    const light = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light);
+    // 直线光源
+    // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    // directionalLight.position.set(10, 10, 10);
+    // // // 设置投射阴影
+    // directionalLight.castShadow = true;
+    // scene.add(directionalLight);
+
+    // 聚光灯
+    const spotLight = new THREE.SpotLight(0xffffff, 500);
+    spotLight.position.set(10, 10, 10);
+    spotLight.castShadow = true;
+    spotLight.target = sphere;
+    // 设置聚光灯角度
+    spotLight.angle = Math.PI / 6;
+
+    spotLight.shadow.mapSize.set(2048, 2048);
+    scene.add(spotLight);
+    // 设置阴影贴图模糊度
+    // directionalLight.shadow.radius = 20;
+    // 设置阴影贴图分辨率
+    // directionalLight.shadow.mapSize.set(2048, 2048);
+
+    // 设置平行光投射相机的属性
+    // directionalLight.shadow.camera.near = 0.5;
+    // directionalLight.shadow.camera.far = 500;
+    // directionalLight.shadow.camera.top = 5;
+    // directionalLight.shadow.camera.bottom = -5;
+    // directionalLight.shadow.camera.left = -5;
+    // directionalLight.shadow.camera.right = 5;
+    // gui
+    //   .add(directionalLight.shadow.camera, "near")
+    //   .min(0)
+    //   .max(20)
+    //   .step(0.1)
+    //   .onChange(() => directionalLight.shadow.camera.updateProjectionMatrix());
+    // // 开启渲染器的阴影贴图
+    renderer.shadowMap.enabled = true;
+
     // create 3 Balls
-    const sphere1 = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 32, 32),
-      new THREE.MeshBasicMaterial({
-        color: 0x0000ff,
-      })
-    );
+    // const sphere1 = new THREE.Mesh(
+    //   new THREE.SphereGeometry(1, 32, 32),
+    //   new THREE.MeshBasicMaterial({
+    //     color: 0x0000ff,
+    //   })
+    // );
     // sphere1.position.x = -3;
     // const sphere2 = new THREE.Mesh(
     //   new THREE.SphereGeometry(1, 32, 32),
@@ -67,21 +127,21 @@ const ThreeDemo = () => {
     //   })
     // );
     // sphere3.position.x = 3;
-    scene.add(sphere1);
-    const tween = new TWEEN.Tween(sphere1.position);
-    tween.to({ x: 10 }, 2000);
-    // tween.repeat(Infinity);
-    // tween.yoyo(true); // 悠悠球,循环运动
-    // 设置ease
-    tween.easing(TWEEN.Easing.Quadratic.InOut);
-    // tween.delay(500);
+    // scene.add(sphere1);
+    // const tween = new TWEEN.Tween(sphere1.position);
+    // tween.to({ x: 10 }, 2000);
+    // // tween.repeat(Infinity);
+    // // tween.yoyo(true); // 悠悠球,循环运动
+    // // 设置ease
+    // tween.easing(TWEEN.Easing.Quadratic.InOut);
+    // // tween.delay(500);
 
-    // 设置第二个动画
-    const tween2 = new TWEEN.Tween(sphere1.position);
-    tween2.to({ x: 0 }, 1000);
-    tween.chain(tween2);
-    tween2.chain(tween);
-    tween.start();
+    // // 设置第二个动画
+    // const tween2 = new TWEEN.Tween(sphere1.position);
+    // tween2.to({ x: 0 }, 1000);
+    // tween.chain(tween2);
+    // tween2.chain(tween);
+    // tween.start();
     // scene.add(sphere2);
     // scene.add(sphere3);
 
