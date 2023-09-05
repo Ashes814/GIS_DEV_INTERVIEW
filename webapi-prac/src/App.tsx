@@ -1,6 +1,7 @@
 import MapContainer from "./openLayers/MapContainer";
 import ThreeDemo from "./threejspra/ThreeDemo";
 import "./App.css";
+import Christmas from "./threejspra/Christmas";
 
 function App() {
   return (
@@ -10,8 +11,9 @@ function App() {
         <MapContainer />
       </div> */}
       <div className="three-demo">
-        <h1>ThreeJS Demo</h1>
-        <ThreeDemo />
+        {/* <h1>正在吃饭,马上回来</h1> */}
+        {/* <ThreeDemo /> */}
+        <Christmas />
       </div>
     </>
   );
