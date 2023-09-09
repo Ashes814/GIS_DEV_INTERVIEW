@@ -13,7 +13,7 @@ function App() {
       <div className="three-demo">
         {/* <h1>正在吃饭,马上回来</h1> */}
         {/* <ThreeDemo /> */}
-        <Christmas />
+        {/* <Christmas /> */}
       </div>
     </>
   );
