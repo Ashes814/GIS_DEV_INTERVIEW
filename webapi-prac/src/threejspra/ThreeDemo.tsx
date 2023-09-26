@@ -82,6 +82,8 @@ const ThreeDemo = () => {
     // 设置聚光灯角度
     spotLight.angle = Math.PI / 6;
 
+    console.log(spotLight);
+
     spotLight.shadow.mapSize.set(2048, 2048);
     scene.add(spotLight);
     // 设置阴影贴图模糊度
