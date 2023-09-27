@@ -1,4 +1,4 @@
-import From from "./Form";
+import Form from "./Form";
 let statuses = ["empty", "typing", "submitting", "success", "error"];
 
 export default function DocApp() {
