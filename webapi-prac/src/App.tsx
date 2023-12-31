@@ -3,11 +3,13 @@ import ThreeDemo from "./threejspra/ThreeDemo";
 import "./App.css";
 import Christmas from "./threejspra/Christmas";
 import DocApp from "./reactDocs/DocApp";
+import Animation from "./JSANIMATION/Animation";
 
 function App() {
   return (
     <>
-      <DocApp />
+      <Animation />
+      {/* <DocApp /> */}
       {/* <div className="ol-container">
         <h1>OpenLayers</h1>
         <MapContainer />
