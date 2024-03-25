@@ -1,4 +1,4 @@
-#
 *.draco
 *.model
 *.texture
+node_modules/
